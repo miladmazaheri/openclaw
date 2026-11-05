@@ -23,6 +23,9 @@ export function summarizeDetailsGeometry(
   let heightMovementPx = 0;
   let sectionInsertions = 0;
   let sectionRemovals = 0;
+  let environmentHeightMovementPx = 0;
+  let outputsTopMovementPx = 0;
+  let automationsTopMovementPx = 0;
   for (let index = 1; index < populated.length; index++) {
     const before = new Map(populated[index - 1]!.sections.map((row) => [row.section, row]));
     const after = new Map(populated[index]!.sections.map((row) => [row.section, row]));
@@ -30,20 +33,34 @@ export function summarizeDetailsGeometry(
       const from = before.get(id);
       const to = after.get(id);
       if (from && to) {
-        topMovementPx += Math.abs(to.top - from.top);
+        const movement = Math.abs(to.top - from.top);
+        topMovementPx += movement;
+        if (id === "outputs") outputsTopMovementPx += movement;
+        if (id === "automations") automationsTopMovementPx += movement;
       } else if (to) {
         sectionInsertions++;
       } else {
         sectionRemovals++;
       }
       heightMovementPx += Math.abs((to?.height ?? 0) - (from?.height ?? 0));
+      if (id === "environment") {
+        environmentHeightMovementPx += Math.abs((to?.height ?? 0) - (from?.height ?? 0));
+      }
     }
   }
   const first = populated[0];
+  const firstEnvironment = first?.sections.find((row) => row.section === "environment");
   return {
     firstPopulatedMs: first?.at ?? null,
     firstHasAutomations: first?.sections.some((row) => row.section === "automations") ?? false,
     firstProcessHeightPx: first?.sections.find((row) => row.section === "processes")?.height ?? 0,
+    firstEnvironmentHeightPx: firstEnvironment?.height ?? null,
+    firstEnvironmentBranchVisible: firstEnvironment?.environmentBranchVisible ?? null,
+    lastEnvironmentHeightPx:
+      populated.at(-1)?.sections.find((row) => row.section === "environment")?.height ?? null,
+    environmentHeightMovementPx,
+    outputsTopMovementPx,
+    automationsTopMovementPx,
     topMovementPx,
     heightMovementPx,
     totalVerticalMovementPx: topMovementPx + heightMovementPx,
