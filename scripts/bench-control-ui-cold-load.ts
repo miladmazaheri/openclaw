@@ -2911,6 +2911,7 @@ try {
             hold: witnessHold,
             observed,
             phases: warmReload?.transcriptRounds,
+            stability: warmReload?.transcriptStability,
             valid: Boolean(valid),
             savedPaintObserved:
               observed?.saved.paintMs !== null && observed?.saved.paintMs !== undefined,
