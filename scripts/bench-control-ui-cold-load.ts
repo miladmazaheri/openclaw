@@ -1651,7 +1651,6 @@ try {
     if (witnessLive) {
       const phases = [];
       Reflect.set(window, "__activeTranscriptRounds", phases);
-      const recordPhase = (phase) => phases.push({ phase, atMs: performance.now() });
       const awaitFirstCommit = () => {
         const pane = document.querySelector(".chat-pane-cache__pane--active");
         const history = Reflect.get(window, "__warmReload")?.witnesses()?.history ?? [];
@@ -1660,7 +1659,7 @@ try {
           requestAnimationFrame(awaitFirstCommit);
           return;
         }
-        recordPhase("intermediate-commit");
+        phases.push({ phase: "intermediate-commit", atMs: performance.now() });
         requestAnimationFrame(() => requestAnimationFrame(() => {
           const messages = ${JSON.stringify(transcriptWitness.variants.live)};
           const totalMessages = ${transcriptWitness.totalMessages.live};
@@ -1673,22 +1672,17 @@ try {
           window.openclawControlUiE2eGateway.setHistoryMessages(messages);
           for (const method of ["chat.history", "chat.startup"]) {
             window.openclawControlUiE2eGateway.setMethodResponse(method, response);
-            window.openclawControlUiE2eGateway.setRequestHandler(method, ({ respond }) => {
-              recordPhase("completed-history-response");
-              respond(response);
-            });
           }
-          recordPhase("tool-completion");
           window.openclawControlUiE2eGateway.emit("sessions.changed", {
             sessionKey: ${JSON.stringify(fixture.selectedSessionKey)}, agentId: "main", phase: "message",
           });
           const awaitCompletedCommit = () => {
-            const completed = [...pane.querySelectorAll('.chat-virtual-row')].some((row) => row.textContent?.includes("The synthetic inspection is complete."));
+            const completed = Reflect.get(pane, "state")?.chatMessages.some((message) => message.__openclaw?.id === "active-reload-tool-answer");
             if (!completed || !Reflect.get(pane, "transcriptReady")) {
               requestAnimationFrame(awaitCompletedCommit);
               return;
             }
-            recordPhase("completed-commit");
+            phases.push({ phase: "completed-commit", atMs: performance.now() });
           };
           requestAnimationFrame(awaitCompletedCommit);
         }));
@@ -2917,6 +2911,8 @@ try {
         ) &&
         (values["active-transcript-reader"] || observed.attached.live) &&
         (!values["active-transcript"] || Boolean(warmReload?.transcriptStability?.anchor)) &&
+        (!values["active-transcript-reader"] ||
+          warmReload?.transcriptStability?.frames[0]?.atMs < wire[0]?.atMs) &&
         (values["active-transcript"] || !observed.attached.saved) &&
         // Chrome's one-shot text timing entry can precede the tail's scroll into view.
         (values["active-transcript-reader"] ||
@@ -2925,12 +2921,9 @@ try {
               warmReload?.transcriptStability?.frames.at(-1)?.distanceFromEnd <= 1
             : observed.live.paintMs !== null)) &&
         (!values["active-transcript-two-round"] ||
-          (warmReload?.transcriptRounds?.some(
-            (entry: { phase: string }) => entry.phase === "completed-history-response",
-          ) &&
-            warmReload.transcriptRounds.some(
-              (entry: { phase: string }) => entry.phase === "completed-commit",
-            )));
+          warmReload?.transcriptRounds?.some(
+            (entry: { phase: string }) => entry.phase === "completed-commit",
+          ));
       await writeFile(
         path.join(artifactDir, `run-${run + 1}.transcript-witness.json`),
         JSON.stringify(
