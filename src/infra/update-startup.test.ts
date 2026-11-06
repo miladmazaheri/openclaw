@@ -83,7 +83,7 @@ describe("update-startup", () => {
   let getUpdateEffectiveChannel: (typeof import("./update-startup.js"))["getUpdateEffectiveChannel"];
   let getUpdateSchedule: (typeof import("./update-status-state.js"))["getUpdateSchedule"];
   let refreshGatewayUpdateStatus: (typeof import("./update-status-schedule.js"))["refreshGatewayUpdateStatus"];
-  let resetUpdateAvailableStateForTest: (typeof import("./update-startup.js"))["resetUpdateAvailableStateForTest"];
+  let resetUpdateAvailableStateForTest: (typeof import("./update-startup-reset.test-support.js"))["resetUpdateAvailableStateForTest"];
   let loaded = false;
   let autoRun: typeof import("./update-startup-auto-run.js");
   const updateChecks = new Set<ReturnType<typeof createGatewayUpdateCheck>>();
@@ -184,11 +184,10 @@ describe("update-startup", () => {
       ({ resolveOpenClawPackageRoot } = await import("./openclaw-root.js"));
       ({ checkUpdateStatus, resolveNpmChannelTag } = await import("./update-check.js"));
       ({ runCommandWithTimeout } = await import("../process/exec.js"));
-      ({
-        runGatewayUpdateCheck: runGatewayUpdateCheckOwner,
-        getUpdateEffectiveChannel,
-        resetUpdateAvailableStateForTest,
-      } = await import("./update-startup.js"));
+      ({ runGatewayUpdateCheck: runGatewayUpdateCheckOwner, getUpdateEffectiveChannel } =
+        await import("./update-startup.js"));
+      ({ resetUpdateAvailableStateForTest } =
+        await import("./update-startup-reset.test-support.js"));
       ({ createGatewayUpdateCheck } = await import("./update-startup-scheduler.js"));
       ({ refreshGatewayUpdateStatus } = await import("./update-status-schedule.js"));
       ({ getUpdateAvailable, getUpdateSchedule } = await import("./update-status-state.js"));

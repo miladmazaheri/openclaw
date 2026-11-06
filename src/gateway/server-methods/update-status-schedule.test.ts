@@ -10,7 +10,7 @@ import {
 import type { UpdateCheckResult } from "../../infra/update-check.js";
 import { resolveDevGitCommits } from "../../infra/update-git-metadata.js";
 import { createDevGitStatus } from "../../infra/update-startup-git.test-support.js";
-import { resetUpdateAvailableStateForTest } from "../../infra/update-startup.js";
+import { resetUpdateAvailableStateForTest } from "../../infra/update-startup-reset.test-support.js";
 import {
   getUpdateAvailable,
   getUpdateSchedule,

@@ -19,7 +19,6 @@ import {
 import { VERSION } from "../version.js";
 import { isTruthyEnvValue } from "./env.js";
 import type { GatewayActiveWorkInspectors } from "./gateway-active-work.js";
-import type { GatewayScheduler } from "./gateway-scheduler.js";
 import {
   EXTERNAL_SUPERVISOR_UPDATE_REQUIRED_REASON,
   isGatewayExternallySupervised,
@@ -35,7 +34,6 @@ import {
   type UpdateChannel,
 } from "./update-channels.js";
 import {
-  createGatewayUpdateLifecycle,
   currentUpdateCheckLifecycle,
   type UpdateCheckLifecycle,
 } from "./update-check-lifecycle.js";
@@ -51,7 +49,6 @@ import { runCampaignUpdate, type AutoUpdateRunner } from "./update-startup-auto-
 import { canRunDevGitCampaign, resolveDevGitUpdate } from "./update-startup-refresh.js";
 import {
   getUpdateSchedule,
-  resetUpdateStatusState,
   setUpdateAvailableCache,
   setUpdateScheduleCache,
   withoutUpdateCampaign,
@@ -80,11 +77,6 @@ export async function getUpdateEffectiveChannel(): Promise<UpdateChannel> {
     installKind: status.installKind,
     git: status.git,
   }).channel;
-}
-
-export function resetUpdateAvailableStateForTest(scheduler: GatewayScheduler): void {
-  resetUpdateStatusState();
-  createGatewayUpdateLifecycle(scheduler);
 }
 
 const UPDATE_CHECK_STATE_KEY = "update.checkState";
@@ -223,7 +215,7 @@ function clearAutoState(nextState: UpdateCheckState): void {
 }
 
 /** Shares local install discovery within the Gateway lifecycle. */
-export function initializeGatewayUpdateStatus(): ReturnType<typeof resolveStartupInstallStatus> {
+function initializeGatewayUpdateStatus(): ReturnType<typeof resolveStartupInstallStatus> {
   return currentUpdateCheckLifecycle().initialize();
 }
 

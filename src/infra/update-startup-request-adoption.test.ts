@@ -23,14 +23,17 @@ it.each(["complete", "attached-close", "before-ready-close"])(
   async (outcome) => {
     const state = await createOpenClawTestState({ label: "update-request-adoption" });
     const startup = await import("./update-startup.js");
+    const { resetUpdateAvailableStateForTest } =
+      await import("./update-startup-reset.test-support.js");
     const updateScheduler = await import("./update-startup-scheduler.js");
-    const { createGatewayUpdateLifecycle } = await import("./update-check-lifecycle.js");
+    const { createGatewayUpdateLifecycle, currentUpdateCheckLifecycle } =
+      await import("./update-check-lifecycle.js");
     const { createDeferredGatewayUpdateCheck } =
       await import("../gateway/server-startup-update-check.js");
     const { resolveGatewayUpdateAdmission } =
       await import("../gateway/server-methods/update-admission.js");
     const scheduler = createTestGatewayScheduler();
-    startup.resetUpdateAvailableStateForTest(scheduler);
+    resetUpdateAvailableStateForTest(scheduler);
     const ready = createDeferred();
     const started = createDeferred<AbortSignal | undefined>();
     const probe = createDeferred<UpdateCheckResult>();
@@ -61,7 +64,7 @@ it.each(["complete", "attached-close", "before-ready-close"])(
       startup.getUpdateEffectiveChannel(),
       deferred
         ? resolveGatewayUpdateAdmission(createUpdateRun({ trigger: "api" }).runId)
-        : startup.initializeGatewayUpdateStatus(),
+        : currentUpdateCheckLifecycle().initialize(),
     ];
     try {
       const signal = await started.promise;
@@ -112,7 +115,7 @@ it.each(["complete", "attached-close", "before-ready-close"])(
       await Promise.allSettled([...requests, owner?.stop()]);
       factory.mockRestore();
       ready.resolve();
-      startup.resetUpdateAvailableStateForTest(scheduler);
+      resetUpdateAvailableStateForTest(scheduler);
       closeOpenClawStateDatabaseForTest();
       await state.cleanup();
     }
