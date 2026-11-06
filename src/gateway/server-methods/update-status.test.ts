@@ -12,11 +12,8 @@ import { readUpdateRunDriver } from "../../infra/update-run-driver.js";
 import * as ledger from "../../infra/update-run-ledger.js";
 import { createUpdateRun, finishUpdateRun, getUpdateRun } from "../../infra/update-run-ledger.js";
 import { readUpdateRunStatus } from "../../infra/update-run-status.js";
-import {
-  getUpdateSchedule,
-  resetUpdateStatusState,
-  setUpdateScheduleCache,
-} from "../../infra/update-status-state.js";
+import { getUpdateSchedule, setUpdateScheduleCache } from "../../infra/update-status-state.js";
+import { resetUpdateStatusState } from "../../infra/update-status-state.test-support.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import {
   beginGatewayRestartSignalAdmission,

@@ -10,13 +10,15 @@ import {
 import type { UpdateCheckResult } from "../../infra/update-check.js";
 import { resolveDevGitCommits } from "../../infra/update-git-metadata.js";
 import { createDevGitStatus } from "../../infra/update-startup-git.test-support.js";
-import { resetUpdateAvailableStateForTest } from "../../infra/update-startup-reset.test-support.js";
 import {
   getUpdateAvailable,
   getUpdateSchedule,
-  resetUpdateStatusState,
   setUpdateScheduleCache,
 } from "../../infra/update-status-state.js";
+import {
+  resetUpdateAvailableStateForTest,
+  resetUpdateStatusState,
+} from "../../infra/update-status-state.test-support.js";
 import { createTestGatewayScheduler } from "../../test-utils/gateway-scheduler-clock.js";
 import { updateStatusHandlers } from "./update-status.js";
 

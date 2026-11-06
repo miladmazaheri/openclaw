@@ -6,11 +6,8 @@ import {
 } from "./update-check-lifecycle.js";
 import * as autoRun from "./update-startup-auto-run.js";
 import { runGatewayUpdateCheck } from "./update-startup.js";
-import {
-  getUpdateAvailable,
-  getUpdateSchedule,
-  resetUpdateStatusState,
-} from "./update-status-state.js";
+import { getUpdateAvailable, getUpdateSchedule } from "./update-status-state.js";
+import { resetUpdateStatusState } from "./update-status-state.test-support.js";
 
 const mocks = vi.hoisted(() => ({
   telemetry: vi.fn(async () => null),

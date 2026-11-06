@@ -16,11 +16,8 @@ import { createDevGitStatus } from "./update-startup-git.test-support.js";
 import { pauseAt, expectNoCalls } from "./update-startup-suite.test-support.js";
 import { runGatewayUpdateCheck as runGatewayUpdateCheckOwner } from "./update-startup.js";
 import { getGatewayUpdateSchedule, refreshGatewayUpdateStatus } from "./update-status-schedule.js";
-import {
-  getUpdateAvailable,
-  getUpdateSchedule,
-  resetUpdateStatusState,
-} from "./update-status-state.js";
+import { getUpdateAvailable, getUpdateSchedule } from "./update-status-state.js";
+import { resetUpdateStatusState } from "./update-status-state.test-support.js";
 
 vi.mock("../version.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../version.js")>()),

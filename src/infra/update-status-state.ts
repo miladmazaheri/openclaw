@@ -47,14 +47,16 @@ function sameUpdateAvailable(a: UpdateAvailable | null, b: UpdateAvailable | nul
 }
 
 export function setUpdateScheduleCache(params: {
-  next: UpdateScheduleState;
+  next: UpdateScheduleState | null;
   onUpdateScheduleChange?: (schedule: UpdateScheduleState) => void;
 }): void {
   if (JSON.stringify(updateScheduleCache) === JSON.stringify(params.next)) {
     return;
   }
   updateScheduleCache = params.next;
-  params.onUpdateScheduleChange?.(params.next);
+  if (params.next) {
+    params.onUpdateScheduleChange?.(params.next);
+  }
 }
 
 export function setUpdateAvailableCache(params: {
@@ -66,9 +68,4 @@ export function setUpdateAvailableCache(params: {
   }
   updateAvailableCache = params.next;
   params.onUpdateAvailableChange?.(params.next);
-}
-
-export function resetUpdateStatusState(): void {
-  updateAvailableCache = null;
-  updateScheduleCache = null;
 }

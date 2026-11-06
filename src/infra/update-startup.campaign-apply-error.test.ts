@@ -25,11 +25,8 @@ import {
   matchingObject,
   idleActiveWorkInspectors,
 } from "./update-startup-suite.test-support.js";
-import {
-  getUpdateAvailable,
-  getUpdateSchedule,
-  resetUpdateStatusState,
-} from "./update-status-state.js";
+import { getUpdateAvailable, getUpdateSchedule } from "./update-status-state.js";
+import { resetUpdateStatusState } from "./update-status-state.test-support.js";
 
 vi.mock("./openclaw-root.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./openclaw-root.js")>()),

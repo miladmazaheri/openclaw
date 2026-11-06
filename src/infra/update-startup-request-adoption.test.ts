@@ -24,7 +24,7 @@ it.each(["complete", "attached-close", "before-ready-close"])(
     const state = await createOpenClawTestState({ label: "update-request-adoption" });
     const startup = await import("./update-startup.js");
     const { resetUpdateAvailableStateForTest } =
-      await import("./update-startup-reset.test-support.js");
+      await import("./update-status-state.test-support.js");
     const updateScheduler = await import("./update-startup-scheduler.js");
     const { createGatewayUpdateLifecycle, currentUpdateCheckLifecycle } =
       await import("./update-check-lifecycle.js");

@@ -10,7 +10,8 @@ import {
 } from "../../infra/restart-sentinel.js";
 import { createGatewayUpdateLifecycle } from "../../infra/update-check-lifecycle.js";
 import { refreshGatewayUpdateStatus } from "../../infra/update-status-schedule.js";
-import { getUpdateSchedule, resetUpdateStatusState } from "../../infra/update-status-state.js";
+import { getUpdateSchedule } from "../../infra/update-status-state.js";
+import { resetUpdateStatusState } from "../../infra/update-status-state.test-support.js";
 import { runCommandWithTimeout } from "../../process/exec.js";
 import { createTestGatewayScheduler } from "../../test-utils/gateway-scheduler-clock.js";
 import { createTempHomeEnv, type TempHomeEnv } from "../../test-utils/temp-home.js";

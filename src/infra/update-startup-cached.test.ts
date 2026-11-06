@@ -17,7 +17,8 @@ import { checkUpdateStatus, resolveNpmChannelTag } from "./update-check.js";
 import { createGatewayUpdateCheck } from "./update-startup-scheduler.js";
 import { runGatewayUpdateCheck } from "./update-startup.js";
 import { getGatewayUpdateSchedule } from "./update-status-schedule.js";
-import { getUpdateAvailable, resetUpdateStatusState } from "./update-status-state.js";
+import { getUpdateAvailable } from "./update-status-state.js";
+import { resetUpdateStatusState } from "./update-status-state.test-support.js";
 
 const { checkTelemetryUpdateMock, versionMock } = await vi.hoisted(
   () => import("./update-startup.test-support.js"),

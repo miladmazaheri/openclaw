@@ -14,11 +14,11 @@ import { resolveOpenClawPackageRoot } from "./openclaw-root.js";
 import { createGatewayUpdateLifecycle } from "./update-check-lifecycle.js";
 import { checkUpdateStatus, resolveNpmChannelTag } from "./update-check.js";
 import * as autoRun from "./update-startup-auto-run.js";
-import { resetUpdateAvailableStateForTest } from "./update-startup-reset.test-support.js";
 import { createGatewayUpdateCheck } from "./update-startup-scheduler.js";
 import { idleActiveWorkInspectors } from "./update-startup-suite.test-support.js";
 import { runGatewayUpdateCheck } from "./update-startup.js";
 import { getUpdateSchedule } from "./update-status-state.js";
+import { resetUpdateAvailableStateForTest } from "./update-status-state.test-support.js";
 
 const { checkTelemetryUpdateMock, versionMock } = await vi.hoisted(
   () => import("./update-startup.test-support.js"),
