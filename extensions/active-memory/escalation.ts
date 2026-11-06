@@ -80,8 +80,50 @@ const LOCALIZED_RECALL_INTENT_PATTERNS = [
   },
 ];
 
+// Persian (fa). Built from named pieces because the alternations are shared by
+// intent and retrospective. Input is normalized first (see normalizeRecallText):
+// Arabic yeh/kaf → Persian, ZWNJ → space, hamza-above (ezafe «ٔ») dropped.
+// A personal assistant answers "who am I meeting tomorrow?" from memory when no
+// calendar is connected, so questions about the user's own appointments count as
+// recall even with a future cue; plain reminders («یادم بنداز فردا …») stay quiet.
+const FA_B = "(?<![\\p{L}\\p{N}_])";
+const FA_E = "(?![\\p{L}\\p{N}_])";
+const FA_EZAFE = "(?: ی)?";
+const FA_PAST_TIME = `(?:قبلا\\u064b?|قبلن|پیش تر|پیشتر|(?:دفعه|سری|جلسه)${FA_EZAFE} (?:قبل|پیش)|(?:اون|آن) (?:دفعه|روز|جلسه)|دیروز|پریروز|(?:هفته|ماه|سال)${FA_EZAFE} (?:پیش|قبل|گذشته)|(?:[0-9۰-۹]+|یک|دو|سه|چهار|پنج|چند) (?:روز|هفته|ماه|سال) (?:پیش|قبل))`;
+const FA_PAST_VERB =
+  "(?:گفتم|گفتی|گفتیم|گفته بود(?:م|ی|یم)|صحبت کرد(?:یم|ه بودیم)|حرف زدیم|تصمیم گرفت(?:یم|م)|توافق کردیم|قرار گذاشت(?:یم|م)|بحث کردیم|انتخاب کرد(?:یم|م)|نوشتم|فرستادم|اشاره کردم|پیشنهاد داد(?:ی|م))";
+const FA_REMEMBER_Q =
+  "(?:یادته|یادتونه|یادت(?:ون)? (?:هست|میاد|میآد|می آید|می آد|مونده|مانده)|به (?:یاد|خاطر) داری|خاطرت هست)";
+const FA_REMIND_WHAT = "یادم (?:بنداز|بیانداز|بینداز|بیار|بیاور) (?:چی|چه|کی|کجا|کدوم|کدام|که چی|که چه)";
+const FA_WHAT_DID = `(?:چی|چه چیزی|چه|کدوم|کدام)(?: رو| را)?.{0,20}${FA_PAST_VERB}`;
+const FA_PLAN_NOUN = "(?:جلسه|قرار|ملاقات|کلاس|برنامه|تمرین|کارگاه|وقت دکتر)";
+const FA_PLAN_Q = `(?:(?:با کی|با چه کسی|کجا|کی|چه ساعتی|ساعت چند|چه روزی|چند شنبه)[^?؟]{0,25}${FA_PLAN_NOUN}${FA_EZAFE}[^?؟]{0,10}(?:دارم|داریم)|${FA_PLAN_NOUN}${FA_EZAFE}[^?؟]{0,25}(?:درباره${FA_EZAFE} (?:چیه|چی|چه)|با کیه|کجاست|کیه|چیه|ساعت چنده|چه ساعتیه))`;
+const FA_PAST_EXCHANGE = `(?:${FA_PAST_TIME}.{0,30}${FA_PAST_VERB}|${FA_PAST_VERB}.{0,30}${FA_PAST_TIME})`;
+const fa = (body: string) => new RegExp(`${FA_B}(?:${body})${FA_E}`, "u");
+
+LOCALIZED_RECALL_INTENT_PATTERNS.push({
+  intent: fa(`${FA_REMEMBER_Q}|${FA_REMIND_WHAT}|${FA_PAST_EXCHANGE}|${FA_WHAT_DID}|${FA_PLAN_Q}`),
+  future: fa(
+    `فردا|پس فردا|امشب|بعدا\\u064b?|(?:هفته|ماه|سال)${FA_EZAFE} (?:بعد|آینده)|آینده|به زودی|بزودی`,
+  ),
+  retrospective: fa(
+    `${FA_PAST_EXCHANGE}|${FA_WHAT_DID}|${FA_PLAN_Q}|${FA_REMEMBER_Q}.{0,40}${FA_PAST_VERB}`,
+  ),
+});
+
+/** Whitespace collapse plus Persian spelling variants, so one pattern covers them. */
+function normalizeRecallText(message: string): string {
+  return message
+    .replace(/ي/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/ٔ/g, "")
+    .replace(/‌/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function hasRecallIntent(message: string): boolean {
-  const normalized = message.replace(/\s+/g, " ").trim();
+  const normalized = normalizeRecallText(message);
   return (
     normalized.length > 0 &&
     (RECALL_INTENT_PATTERNS.some((pattern) => pattern.test(normalized)) ||
