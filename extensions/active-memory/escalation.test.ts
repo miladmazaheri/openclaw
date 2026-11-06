@@ -85,6 +85,21 @@ describe("active-memory escalation", () => {
     "Vous vous rappelez de Gauthier ?",
     "Tu te souviens d'Olivier ?",
     "Tu te souviens d'envoyer le rapport ?",
+    // Persian
+    "یادته دربارهٔ بودجه چی گفتیم؟",
+    "یادت هست کدوم دیتابیس رو انتخاب کردیم؟",
+    "يادت مياد هفته پيش چي تصميم گرفتيم؟",
+    "دفعهٔ قبل دربارهٔ چی صحبت کردیم؟",
+    "هفتهٔ پیش با آقای متولی چی قرار گذاشتیم؟",
+    "دیروز چی تصمیم گرفتیم؟",
+    "چی تصمیم گرفتیم دربارهٔ قیمت‌گذاری؟",
+    "قبلاً گفتم کدوم سرور رو می‌خوام؟",
+    "۳ روز پیش دربارهٔ چی حرف زدیم؟",
+    "یادم بنداز چی گفتم دربارهٔ کارگاه",
+    "فردا ساعت ده با کی جلسه دارم و دربارهٔ چه؟",
+    "پنجشنبه با کی قرار دارم؟",
+    "ساعت چند کلاس دارم؟",
+    "جلسهٔ فردا دربارهٔ چیه؟",
   ])("recognizes recall intent in %j", (message) => {
     expect(hasRecallIntent(message)).toBe(true);
   });
@@ -168,6 +183,14 @@ describe("active-memory escalation", () => {
     "Hier j'ai payé à crédit.",
     "Hier on a fait un audit.",
     "J'ai dit que mon cahier était plein.",
+    // Persian
+    "یادم بنداز فردا ساعت ۹ به آقای متولی زنگ بزنم",
+    "فردا جلسه داریم",
+    "یک متن دربارهٔ تئاتر بنویس",
+    "این را یادت باشه",
+    "سلام، حالت چطوره؟",
+    "جلسهٔ فردا رو لغو کن",
+    "برای هفتهٔ بعد یک برنامه بنویس",
   ])("does not mistake ordinary or future-facing %j for recall intent", (message) => {
     expect(hasRecallIntent(message)).toBe(false);
   });
