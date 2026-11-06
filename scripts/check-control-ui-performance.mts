@@ -58,10 +58,10 @@ const controlUiPerformanceBudgets = {
   // Retired copy, browser fallbacks, and unused initializers: measured head plus 64 B.
   // PR #194017 (L294): 1,288,049 B CI-measured with the shared-boot window receipt, plus 64 B headroom.
   // Ayaan Zaidi approved +1 KiB for naming a failed reply's provider cause (#193996, 2026-11-06).
-  // PR #194142 (L293): 1,289,634 B CI-measured; Details first-frame prewarm starts in startup.
-  chatBootJsGzipBytes: 1_289_698,
-  // PR #194142 (L293): 797,783 B CI-measured; Details first-frame prewarm starts in startup.
-  newBootJsGzipBytes: 797_847,
+  // PR #194142 (L293): 1,289,400 B CI-measured; Details first-frame prewarm starts in startup.
+  chatBootJsGzipBytes: 1_289_464,
+  // PR #194142 (L293): 797,998 B CI-measured; Details first-frame prewarm starts in startup.
+  newBootJsGzipBytes: 798_062,
   startupCssRequests: 1,
   // Solid 2 action/optimistic runtime adoption; offset tracked by HF-STARTUP-BUDGET.
   // Jacob Tomlinson approved +50 B for native inline views (#173135, 2026-10-22).
