@@ -19,6 +19,13 @@ const ABORT_TRIGGERS = new Set([
   "止めて",
   "रुको",
   "توقف",
+  // Persian: whole-message stop requests only.
+  "توقف کن",
+  "بس کن",
+  "بسه",
+  "صبر کن",
+  "وایسا",
+  "دست نگه دار",
   "стоп",
   "остановись",
   "останови",
@@ -46,7 +53,7 @@ const ABORT_TRIGGERS = new Set([
   "please stop",
   "stop please",
 ]);
-const TRAILING_ABORT_PUNCTUATION_RE = /[.!?！？…,，。;；:：'"’”)\]}]+$/u;
+const TRAILING_ABORT_PUNCTUATION_RE = /[.!?！？…,，。;；:：'"’”)\]}؟،؛]+$/u;
 
 export function normalizeAbortTriggerText(text: string): string {
   return normalizeLowercaseStringOrEmpty(text)

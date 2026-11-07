@@ -251,6 +251,15 @@ describe("abort detection", () => {
     expect(isAbortRequestText("stopp")).toBe(true);
     expect(isAbortRequestText("pare")).toBe(true);
     expect(isAbortRequestText(" توقف ")).toBe(true);
+    expect(isAbortRequestText("بس کن")).toBe(true);
+    expect(isAbortRequestText("بس  کن!")).toBe(true);
+    expect(isAbortRequestText("بسه")).toBe(true);
+    expect(isAbortRequestText("صبر کن.")).toBe(true);
+    expect(isAbortRequestText("وایسا")).toBe(true);
+    expect(isAbortRequestText("توقف کن")).toBe(true);
+    expect(isAbortRequestText("دست نگه دار")).toBe(true);
+    expect(isAbortRequestText("بس کن دیگه این‌قدر توضیح نده")).toBe(false);
+    expect(isAbortRequestText("صبر کن تا فردا")).toBe(false);
     expect(isAbortRequestText("/stop@openclaw_bot", { botUsername: "openclaw_bot" })).toBe(true);
     expect(isAbortRequestText("/Stop@openclaw_bot", { botUsername: "openclaw_bot" })).toBe(true);
     expect(

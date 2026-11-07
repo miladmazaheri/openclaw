@@ -11,6 +11,7 @@ Personal fork of [openclaw/openclaw](https://github.com/openclaw/openclaw) for c
 | Commit | What | Why |
 |---|---|---|
 | `feat(active-memory): recognize Persian recall intent` | Persian patterns in `extensions/active-memory/escalation.ts` (+ tests in `escalation.test.ts`) | In `escalate` mode Active Memory only searches other conversations when it detects recall intent; upstream has no Persian patterns, so Persian questions never triggered it. Without this, `mode: "always"` was needed, adding ~14 s to every reply. |
+| `feat(auto-reply): accept Persian stop words` | Persian whole-message stop requests («بس کن»، «بسه»، «صبر کن»، «وایسا»، «توقف کن»، «دست نگه دار») and Persian trailing punctuation in `src/auto-reply/reply/abort-trigger-text.ts` (+ cases in `abort.test.ts`) | Upstream only knew «توقف», so «بس کن» during a long reply was sent to the agent as a normal message instead of stopping the run. |
 
 ## Deploying to an installed OpenClaw (no full rebuild)
 
@@ -23,6 +24,12 @@ node scripts/raatik/patch-installed-active-memory.mjs --restore   # puts the ori
 ```
 
 The script refuses to run unless the installed OpenClaw is exactly `2026.10.10` and the chunk has the expected exports. Restart the gateway afterwards, then set `plugins.entries.active-memory.config.mode` back to `"escalate"`.
+
+The Persian stop words are patched the same way, in the core chunk and the Control UI chat bundle (the script reads the words from the source file and self-tests the patched chunk):
+
+```bash
+node scripts/raatik/patch-installed-abort-triggers.mjs --check | --apply | --restore
+```
 
 Running the tests for a changed extension file without installing the monorepo: copy the `.ts` and `.test.ts` files next to any `node_modules` that has `vitest`, and run `vitest run`.
 
