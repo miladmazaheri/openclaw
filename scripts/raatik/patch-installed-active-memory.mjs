@@ -1,5 +1,5 @@
 // Applies this fork's active-memory recall-intent changes (Persian) to an installed
-// OpenClaw 2026.10.10 without rebuilding the whole monorepo: the installed build keeps
+// OpenClaw 2026.11.1 without rebuilding the whole monorepo: the installed build keeps
 // extensions/active-memory/escalation.ts as one self-contained chunk with two exports.
 //
 //   node scripts/raatik/patch-installed-active-memory.mjs --check     build + self-test only
@@ -15,7 +15,7 @@ import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-const EXPECTED_VERSION = "2026.10.10";
+const EXPECTED_VERSION = "2026.11.1";
 const CHUNK = "dist/escalation-DGeqPFqJ.mjs";
 const EXPORT_LINE = "export { resolveRecallEscalationDecision as n, hasRecallIntent as t };";
 

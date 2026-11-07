@@ -1,5 +1,5 @@
 // Applies this fork's Persian stop words (src/auto-reply/reply/abort-trigger-text.ts) to an
-// installed OpenClaw 2026.10.10 without rebuilding: the core chunk (used by channels such as
+// installed OpenClaw 2026.11.1 without rebuilding: the core chunk (used by channels such as
 // Bale) and the Control UI chat bundle each hold a copy of the stop-word set.
 //
 //   node scripts/raatik/patch-installed-abort-triggers.mjs --check     self-test only
@@ -13,9 +13,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-const EXPECTED_VERSION = "2026.10.10";
+const EXPECTED_VERSION = "2026.11.1";
 const CORE_CHUNK = "dist/abort-trigger-text-D3imtBrD.mjs";
-const UI_CHUNK = "dist/control-ui/assets/control-ui-boot-chat-DMPJhfg4.js";
+const UI_CHUNK = "dist/control-ui/assets/control-ui-boot-chat-DR-fPZCj.js";
 const OLD_PUNCTUATION = `/[.!?！？…,，。;；:：'"’”)\\]}]+$/u`;
 
 const args = process.argv.slice(2);

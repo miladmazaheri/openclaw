@@ -4,7 +4,8 @@ Personal fork of [openclaw/openclaw](https://github.com/openclaw/openclaw) for c
 
 ## Branches
 
-- `fa/v2026.10.10` — based on tag `v2026.10.10`, the version our assistants run. Holds our changes as small, separate commits so they can be rebased onto a newer tag or offered upstream as pull requests.
+- `fa/v2026.11.1` — based on tag `v2026.11.1`, the version our assistants run (since 2026-11-07). Holds our changes as small, separate commits so they can be rebased onto a newer tag or offered upstream as pull requests.
+- `fa/v2026.10.10` — the previous base; kept for reference.
 
 ## Changes
 
@@ -23,7 +24,7 @@ node scripts/raatik/patch-installed-active-memory.mjs --apply     # backs up the
 node scripts/raatik/patch-installed-active-memory.mjs --restore   # puts the original back
 ```
 
-The script refuses to run unless the installed OpenClaw is exactly `2026.10.10` and the chunk has the expected exports. Restart the gateway afterwards, then set `plugins.entries.active-memory.config.mode` back to `"escalate"`.
+The script refuses to run unless the installed OpenClaw is exactly `2026.11.1` and the chunk has the expected exports. Restart the gateway afterwards, then set `plugins.entries.active-memory.config.mode` back to `"escalate"`.
 
 The Persian stop words are patched the same way, in the core chunk and the Control UI chat bundle (the script reads the words from the source file and self-tests the patched chunk):
 
@@ -37,4 +38,5 @@ Running the tests for a changed extension file without installing the monorepo: 
 
 1. `git fetch upstream --tags --depth 1` for the new tag (this clone is shallow).
 2. Create `fa/v<new-tag>` from the new tag and cherry-pick our commits.
-3. Re-run the tests; the patch script's chunk name and export line change with every build, so update `CHUNK` / `EXPORT_LINE` or build the package instead.
+3. Re-run the tests; the patch script's chunk name and export line change with every build, so update `CHUNK` / `EXPORT_LINE` or build the package instead. (2026.10.10 → 2026.11.1: the core chunks kept their names; only the Control UI chat bundle was renamed.)
+4. Install with the package's own scripts allowed, or the bundled plugins' postinstall is skipped: `npm install -g openclaw@<version> --allow-scripts=@google/genai,esbuild,protobufjs,openclaw`.
